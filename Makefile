@@ -5,19 +5,19 @@ RELEASE_CFLAGS = -Wall -O2 -shared
 MKDIR_P ?= mkdir -p
 BUILD_DIR ?= ./build
 
-DEV_TARGET=$(BUILD_DIR)/test_dynstr
-RELEASE_TARGET=$(BUILD_DIR)/libdynstr.so
+DEV_TARGET=$(BUILD_DIR)/test_neostring
+RELEASE_TARGET=$(BUILD_DIR)/libneostring.so
 
 dev: $(DEV_TARGET)
 release: clean $(RELEASE_TARGET)
 
-$(DEV_TARGET): src/dyn_str.c src/main.c
+$(DEV_TARGET): src/neostring.c src/main.c
 	$(MKDIR_P) $(BUILD_DIR)
-	$(CC) $(DEV_CFLAGS) src/dyn_str.c src/main.c -o $@ 
+	$(CC) $(DEV_CFLAGS) src/neostring.c src/main.c -o $@ 
 
-$(RELEASE_TARGET): src/dyn_str.c
+$(RELEASE_TARGET): src/neostring.c
 	$(MKDIR_P) $(BUILD_DIR)
-	$(CC) $(RELEASE_CFLAGS) src/dyn_str.c -o $@ 
+	$(CC) $(RELEASE_CFLAGS) src/neostring.c -o $@ 
 
 
 .PHONY: clean
