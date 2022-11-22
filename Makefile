@@ -19,6 +19,10 @@ $(RELEASE_TARGET): src/neostring.c
 	$(MKDIR_P) $(BUILD_DIR)
 	$(CC) $(RELEASE_CFLAGS) src/neostring.c -o $@ 
 
+install: release 
+	sudo cp ./src/neostring.h /usr/include 
+	sudo cp ./build/libneostring.so /usr/lib
+
 
 .PHONY: clean
 clean:

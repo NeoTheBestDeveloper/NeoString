@@ -62,7 +62,14 @@ NeoStr new_empty_str(void) {
     return str->data;
 }
 
-NeoStr copy_str(const NeoStr src);
+NeoStr copy_str(const NeoStr src) {
+    uint64_t src_len = str_len(src);
+    _NeoStr *str = (_NeoStr *)malloc(HEADER_SIZE + src_len + 1);
+    str->capacity = str_capacity(src);
+    str->len = src_len;
+    memcpy(str->data, src, src_len + 1);
+    return str->data;
+}
 
 uint64_t str_len(const NeoStr str) {
     return ((_NeoStr *)(str - HEADER_SIZE))->len;
