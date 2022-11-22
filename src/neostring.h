@@ -47,6 +47,6 @@ void free_str(NeoStr s);
 // join (from NeoStr and char *).
 // slices (like python, but all interval is inclusive).
 // format.
-// str_clear.
+// is_empty.
 
 #endif // !NEO_STRING_H

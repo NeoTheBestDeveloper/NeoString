@@ -12,8 +12,8 @@ static void memcpy(void *dst, const void *src, uint64_t len) {
 
 static uint64_t char_len(const char *str) {
     uint64_t len = 0;
-    while (str[len++] != '\0') {
-    }
+    while (str[len++] != '\0')
+        ;
     return len - 1;
 }
 
@@ -106,11 +106,16 @@ NeoStr str_append_char(NeoStr dst, const char *src) {
 }
 
 void str_insert_len(NeoStr dst, const void *src, uint64_t src_len,
-                    uint64_t from);
+                    uint64_t from) {}
 void str_insert_char(NeoStr dst, const char *src, uint64_t from);
 void str_insert_str(NeoStr dst, const NeoStr src, uint64_t from);
 
-void str_remove(NeoStr dst, uint64_t start, uint64_t end);
+void str_remove(NeoStr dst, uint64_t from, uint64_t len) {
+    for (uint64_t i = from; i < from + len; i++) {
+        dst[i] = dst[i + len];
+    }
+    set_len(dst, str_len(dst) - len);
+}
 
 void free_str(NeoStr s) {
     if (s == NULL)
