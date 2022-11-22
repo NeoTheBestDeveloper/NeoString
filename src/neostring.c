@@ -4,6 +4,7 @@
 #include "neostring.h"
 
 static void memcpy(void *dst, const void *src, uint64_t len) {
+
     char *d = dst;
     const char *s = src;
     while (len--)
@@ -21,6 +22,8 @@ uint64_t str_available(const NeoStr str) {
     return str_capacity(str) - str_len(str);
 }
 
+bool is_empty(const NeoStr str) { return (str_len(str) == 0); }
+
 NeoStr increase_capacity(NeoStr src, uint64_t add_len) {
     uint64_t available = str_available(src);
     if (available >= add_len)
@@ -31,9 +34,6 @@ NeoStr increase_capacity(NeoStr src, uint64_t add_len) {
     _NeoStr *new_s = (_NeoStr *)realloc((char *)src - HEADER_SIZE,
                                         HEADER_SIZE + new_capacity + 1);
     new_s->capacity = new_capacity;
-    new_s->len = new_len;
-
-    memcpy(new_s->data, src, new_capacity + 1);
 
     return (new_s->data);
 }
@@ -105,10 +105,32 @@ NeoStr str_append_char(NeoStr dst, const char *src) {
     return str_append_len(dst, src, char_len(src));
 }
 
-void str_insert_len(NeoStr dst, const void *src, uint64_t src_len,
-                    uint64_t from) {}
-void str_insert_char(NeoStr dst, const char *src, uint64_t from);
-void str_insert_str(NeoStr dst, const NeoStr src, uint64_t from);
+NeoStr str_insert_len(NeoStr dst, const void *src, uint64_t src_len,
+                      uint64_t from) {
+    uint64_t old_len = str_len(dst);
+    dst = increase_capacity(dst, src_len);
+
+    for (uint64_t i = old_len - 1; i >= from; i--)
+        dst[i + src_len] = dst[i];
+
+    uint64_t j = 0;
+    for (uint64_t i = from; i < from + src_len; i++) {
+        dst[i] = ((char *)src)[j];
+        j++;
+    }
+
+    dst[old_len + src_len] = '\0';
+    set_len(dst, old_len + src_len);
+
+    return dst;
+}
+NeoStr str_insert_char(NeoStr dst, const char *src, uint64_t from) {
+    return str_insert_len(dst, src, char_len(src), from);
+}
+
+NeoStr str_insert_str(NeoStr dst, const NeoStr src, uint64_t from) {
+    return str_insert_len(dst, src, str_len(src), from);
+}
 
 void str_remove(NeoStr dst, uint64_t from, uint64_t len) {
     for (uint64_t i = from; i < from + len; i++) {

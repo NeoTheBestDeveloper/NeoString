@@ -1,6 +1,7 @@
 #ifndef NEO_STRING_H
 #define NEO_STRING_H
 
+#include <stdbool.h>
 #include <stdint.h>
 
 #define HEADER_SIZE (sizeof(_NeoStr))
@@ -23,15 +24,16 @@ NeoStr copy_str(const NeoStr src);
 uint64_t str_len(const NeoStr str);
 uint64_t str_capacity(const NeoStr str);
 uint64_t str_available(const NeoStr str);
+bool is_empty(const NeoStr str);
 
 NeoStr str_append_len(NeoStr dst, const void *src, uint64_t src_len);
 NeoStr str_append_str(NeoStr dst, const NeoStr src);
 NeoStr str_append_char(NeoStr dst, const char *src);
 
-void str_insert_len(NeoStr dst, const void *src, uint64_t src_len,
-                    uint64_t from);
-void str_insert_char(NeoStr dst, const char *src, uint64_t from);
-void str_insert_str(NeoStr dst, const NeoStr src, uint64_t from);
+NeoStr str_insert_len(NeoStr dst, const void *src, uint64_t src_len,
+                      uint64_t from);
+NeoStr str_insert_char(NeoStr dst, const char *src, uint64_t from);
+NeoStr str_insert_str(NeoStr dst, const NeoStr src, uint64_t from);
 
 void str_remove(NeoStr dst, uint64_t from, uint64_t len);
 
@@ -47,6 +49,5 @@ void free_str(NeoStr s);
 // join (from NeoStr and char *).
 // slices (like python, but all interval is inclusive).
 // format.
-// is_empty.
 
 #endif // !NEO_STRING_H
