@@ -17,6 +17,7 @@ typedef struct {
 
 // Constructors.
 NeoStr new_str(const char *init);
+NeoStr new_empty_str_capacity(uint64_t capacity);
 NeoStr new_empty_str(void);
 NeoStr copy_str(const NeoStr src);
 
@@ -37,8 +38,20 @@ NeoStr str_insert_str(NeoStr dst, const NeoStr src, uint64_t from);
 
 void str_remove(NeoStr dst, uint64_t from, uint64_t len);
 
+void str_clear(NeoStr str);
+
 // Destructor.
 void free_str(NeoStr s);
+
+// Some low level stuff.
+void *memcpy(void *dest, const void *src, uint64_t len);
+uint64_t char_len(const char *str);
+uint64_t str_available(const NeoStr str);
+NeoStr increase_capacity(NeoStr src, uint64_t add_len);
+void set_len(NeoStr str, uint64_t new_len);
+NeoStr num_to_str(uint64_t num);
+
+// TODO: Create tests for library.
 
 // Future API
 // trim.
@@ -49,5 +62,6 @@ void free_str(NeoStr s);
 // join (from NeoStr and char *).
 // slices (like python, but all interval is inclusive).
 // format.
+// string compare
 
 #endif // !NEO_STRING_H
